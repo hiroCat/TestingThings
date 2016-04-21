@@ -34,18 +34,29 @@ def searchIfNotesPublished(dniInput,bornDateInput,permitClassInput,examDateInput
     browser.implicitly_wait(10) #Wait for the page to load with the response 
     
     html=browser.page_source
-    
-    errors = browser.find_element_by_id("formularioBusquedaNotas:messages")
-    
-    foundScore = True
-    error =  errors.find_element_by_tag_name('ul')
-    for msg in error.find_elements_by_tag_name('li'):
-        if msg.text != "":
-            print "Sorry you don't have the score yet"
-#            print msg.text
-            foundScore = False
-            break
-    if(foundScore):
-        print "Run for it you have the notes !!!!"
+    try:
+        errors = browser.find_element_by_id("formularioBusquedaNotas:messages")
+        foundScore = True
+        error =  errors.find_element_by_tag_name('ul')
+        for msg in error.find_elements_by_tag_name('li'):
+            if msg.text != "":
+                print "Sorry you don't have the score yet"
+    #            print msg.text
+                foundScore = False
+                break
+        if(foundScore):
+            YouMayHaveTheScore(browser)
+    except:
+        YouMayHaveTheScore(browser)
 
+
+def YouMayHaveTheScore(browser):
+    try:
+        score = browser.find_element_by_id("formularioResultadoNotas:j_id37:0:j_id69")
+        if (score.text != ""):
+            print "Run for it you have the score !!!!"
+            print "And you score is -> ", score.text
+    except:
+        print "Some problems in paradise" 
+        
 #searchIfNotesPublished("44444444X","01/01/2001","A2","01/01/2001")
